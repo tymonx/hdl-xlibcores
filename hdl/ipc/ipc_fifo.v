@@ -35,7 +35,7 @@ module ipc_fifo(
     input [DATA_WIDTH-1:0] data_in,
     input read_i,
     output reg [DATA_WIDTH-1:0] data_out,
-    output reg ready_o,
+    output reg valid_o,
     output reg overflow_o,
     output full_o,
     output empty_o,
@@ -63,7 +63,7 @@ module ipc_fifo(
             memory[i] = 0;
         end
         data_out = DATA_INIT[DATA_WIDTH-1:0];
-        ready_o = 1'b0;
+        valid_o = 1'b0;
         overflow_o = 1'b0;
     end
 
@@ -72,8 +72,8 @@ module ipc_fifo(
     assign full_o = &data_count;
 
     always @(posedge clk_i) begin
-        // Data output is ready and valid after successful read:
-        ready_o <= 1'b0;
+        // Data output is valid after successful read:
+        valid_o <= 1'b0;
         // Detect overflow:
         if (write_i && full_o) begin
             overflow_o <= 1'b1;
@@ -85,7 +85,7 @@ module ipc_fifo(
         end
         // Read data from FIFO:
         if (read_i && !empty_o) begin
-            ready_o <= 1'b1;
+            valid_o <= 1'b1;
             data_out <= memory[read_pointer];
             read_pointer <= read_pointer + READ_INC;
         end
@@ -101,7 +101,7 @@ module ipc_fifo(
         end
         // Reset:
         if (reset_i) begin
-            ready_o <= 1'b0;
+            valid_o <= 1'b0;
             data_out <= DATA_INIT[DATA_WIDTH-1:0];
             data_count <= 0;
             read_pointer <= 0;
