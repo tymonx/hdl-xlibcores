@@ -2,7 +2,7 @@
  * @copyright Copyright (c) 2014, Tymoteusz Blazejczyk - www.tymonx.com
  * All rights reserved.
  *
- * @license Redistribution and use in source and binary forms, with or without
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
  * * Redistributions of source code must retain the above copyright notice, this
@@ -28,36 +28,64 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/*!
+ * @brief
+ * IPC FIFO module
+ */
 module ipc_fifo(
+    //% Main clock for module
     input clk_i,
+    //% Synchronous reset data count, data output and status flags
     input reset_i,
+    //% Strobe used to write data
     input write_i,
+    //% Data that will be written
     input [DATA_WIDTH-1:0] data_in,
+    //% Strobe used to read data
     input read_i,
+    //% Data output is registered. Monitor valid_o after read
     output reg [DATA_WIDTH-1:0] data_out,
+    //% When data output is valid
     output reg valid_o,
+    //% When try to write data when FIFO was full. Deassigned after reset
     output reg overflow_o,
+    //% When FIFO reach maximum capacity. Write operation will be blocked
     output full_o,
+    //% When FIFO has no data. Read operation will be blocked
     output empty_o,
+    //% Actual data count in FIFO. 0 means that FIFO is empty
     output [ADDR_WIDTH-1:0] data_count_out
 );
 
+    //% Expected capacity. Value rounded to the nearest power of two
     parameter CAPACITY = 256;
+    //% Data output value after reset state
     parameter DATA_INIT = 0;
+    //% Data input/output width
     parameter DATA_WIDTH = 8;
+    //% Memory capacity calculated using address bus width
     parameter ADDR_WIDTH = $clog2(CAPACITY);
 
+    //% Memory size based on bus address width
     localparam MEMORY_SIZE = 2**ADDR_WIDTH;
+    //% Data counter that will be incremented by this value
     localparam [ADDR_WIDTH-1:0] DATA_COUNT_INC = 1;
+    //% Write pointer that will be incremented by this value
     localparam [ADDR_WIDTH-1:0] WRITE_INC = 1;
+    //% Read pointer that will be incremented by this value
     localparam [ADDR_WIDTH-1:0] READ_INC = 1;
 
+    //% Write pointer that indicates memory location where data will be saved
     reg [ADDR_WIDTH-1:0] write_pointer = 0;
+    //% Read pointer that indicates memory location where data will be read
     reg [ADDR_WIDTH-1:0] read_pointer = 0;
+    //% Actual data count
     reg [ADDR_WIDTH-1:0] data_count = 0;
+    //% Main memory for inter process communication that contains data
     reg [DATA_WIDTH-1:0] memory[0:MEMORY_SIZE-1];
 
     initial begin: init
+        //% Temporary value used for initialization loops
         integer i;
         for (i=0; i<MEMORY_SIZE; i=i+1) begin
             memory[i] = 0;
@@ -71,7 +99,10 @@ module ipc_fifo(
     assign empty_o = |data_count;
     assign full_o = &data_count;
 
-    always @(posedge clk_i) begin
+    /*!
+     * @brief Main FIFO process
+     */
+    always @(posedge clk_i) begin: fifo
         // Data output is valid after successful read:
         valid_o <= 1'b0;
         // Detect overflow:
