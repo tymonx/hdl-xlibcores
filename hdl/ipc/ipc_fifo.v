@@ -33,21 +33,21 @@
  * IPC FIFO module
  */
 module ipc_fifo(
-    //% Main clock for module
+    //% Main clock
     input clk_i,
     //% Synchronous reset data count, data output and status flags
     input reset_i,
     //% Strobe used to write data
     input write_i,
-    //% Data that will be written
+    //% Data to be written
     input [DATA_WIDTH-1:0] data_in,
     //% Strobe used to read data
     input read_i,
-    //% Data output is registered. Monitor valid_o after read
+    //% Data that is read. Output is registered. Monitor valid_o after read
     output reg [DATA_WIDTH-1:0] data_out,
     //% When data output is valid
     output reg valid_o,
-    //% When try to write data when FIFO was full. Deassigned after reset
+    //% When trying to write data when FIFO was full. Deassigned after reset
     output reg overflow_o,
     //% When FIFO reach maximum capacity. Write operation will be blocked
     output full_o,
