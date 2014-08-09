@@ -101,6 +101,7 @@ module ipc_fifo(
         end
         // Reset:
         if (reset_i) begin
+            ready_o <= 1'b0;
             data_out <= DATA_INIT[DATA_WIDTH-1:0];
             data_count <= 0;
             read_pointer <= 0;
