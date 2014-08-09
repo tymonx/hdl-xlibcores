@@ -31,9 +31,7 @@
 /*!
  * @note Source linted by Verilator 3.862
  * @note Source documented by Doxverilog 2.8
- */
-
-/*!
+ *
  * @brief
  * IPC FIFO module
  */
