@@ -51,8 +51,6 @@ module ipc_fifo(
     output reg [DATA_WIDTH-1:0] data_out,
     //% When data output is valid
     output reg valid_o,
-    //% When trying to write data when FIFO was full. Deassigned after reset
-    output reg overflow_o,
     //% When FIFO reach maximum capacity. Write operation will be blocked
     output full_o,
     //% When FIFO has no data. Read operation will be blocked
@@ -96,7 +94,6 @@ module ipc_fifo(
         end
         data_out = DATA_INIT[DATA_WIDTH-1:0];
         valid_o = 1'b0;
-        overflow_o = 1'b0;
     end
 
     assign data_count_out = data_count;
@@ -109,10 +106,6 @@ module ipc_fifo(
     always @(posedge clk_i) begin: fifo
         // Data output is valid after successful read:
         valid_o <= 1'b0;
-        // Detect overflow:
-        if (write_i && full_o) begin
-            overflow_o <= 1'b1;
-        end
         // Write data to FIFO:
         if (write_i && !full_o) begin
             memory[write_pointer] <= data_in;
@@ -141,7 +134,6 @@ module ipc_fifo(
             data_count <= 0;
             read_pointer <= 0;
             write_pointer <= 0;
-            overflow_o <= 1'b0;
         end
     end
 

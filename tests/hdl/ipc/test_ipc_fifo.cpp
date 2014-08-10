@@ -46,7 +46,6 @@ sc_signal<bool> fifo_read;
 sc_signal<bool> fifo_valid;
 sc_signal<bool> fifo_empty;
 sc_signal<bool> fifo_full;
-sc_signal<bool> fifo_overflow;
 sc_signal<std::uint32_t> fifo_data_in;
 sc_signal<std::uint32_t> fifo_data_out;
 sc_signal<std::uint32_t> fifo_data_count;
@@ -70,7 +69,6 @@ class FifoTest : public ::testing::Test {
 TEST_F(FifoTest, InitAfterReset)  {
     EXPECT_TRUE(fifo_empty);
     EXPECT_FALSE(fifo_full);
-    EXPECT_FALSE(fifo_overflow);
     EXPECT_EQ(0, fifo_data_out);
 }
 
@@ -105,7 +103,6 @@ int sc_main(int argc, char* argv[]) {
     fifo.data_out(fifo_data_out);
     fifo.empty_o(fifo_empty);
     fifo.full_o(fifo_full);
-    fifo.overflow_o(fifo_overflow);
     fifo.data_count_out(fifo_data_count);
 
     /* Run unit tests */
