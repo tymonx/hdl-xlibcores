@@ -8,7 +8,7 @@ External tools and libraries
 
 * CMake 2.8
 * Verilator
-* Systemc 2.3.x
+* SystemC 2.3.x
 * Doxverilog 1.8 (patched Doxygen 1.8.5 for verilog)
 
 Build
