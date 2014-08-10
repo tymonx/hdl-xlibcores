@@ -29,8 +29,15 @@
 cmake_minimum_required(VERSION 2.6)
 project(hdl-xlibcores)
 
+set(CMAKE_CXX_FLAGS "-std=c++11")
+
 include(Settings.cmake)
 include(cmake/Verilator.cmake)
 verilator_create()
 
+include_directories(src)
+
 add_subdirectory(hdl/ipc)
+
+enable_testing()
+add_subdirectory(tests/hdl/ipc)

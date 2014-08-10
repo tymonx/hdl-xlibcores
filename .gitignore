@@ -7,3 +7,5 @@ build/*
 *.mk
 *.so
 *.pyc
+.vimrc
+.ycm_extra_conf.py

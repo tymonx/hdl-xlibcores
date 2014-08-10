@@ -100,7 +100,7 @@ module ipc_fifo(
     end
 
     assign data_count_out = data_count;
-    assign empty_o = |data_count;
+    assign empty_o = ~|data_count;
     assign full_o = &data_count;
 
     /*!
