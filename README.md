@@ -3,6 +3,14 @@ HDL-xLibCores
 
 HDL x-library of IP Cores
 
+External tools and libraries
+----------------------------
+
+* CMake 2.8
+* Verilator
+* Systemc 2.3.x
+* Doxverilog 1.8 (patched Doxygen 1.8.5 for verilog)
+
 Build
 -----
 
