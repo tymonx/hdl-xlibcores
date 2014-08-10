@@ -86,6 +86,8 @@ TEST_F(FifoTest, DataCount) {
         fifo_data_in = 1;
         sc_start(1, SC_NS);
 
+        EXPECT_EQ(i, fifo_data_count);
+
         fifo_write = 0;
         fifo_data_in = 0;
         sc_start(1, SC_NS);
