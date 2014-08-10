@@ -26,6 +26,18 @@ To clean workspace:
 
     make clean
 
+Test
+----
+
+Library use unit testing and testbenches to valid correct module behavior.
+Run all test on Linux after doing build step:
+
+    make test
+
+To run particular test e.g. on Fifo module:
+
+    ./tests/hdl/ipc/test_ipc_fifo
+
 Documentation
 -------------
 
