@@ -37,10 +37,6 @@
 
 #define TEST_DATA_COUNT     10
 
-double sc_time_stamp() {
-    return 0;
-}
-
 Vipc_fifo fifo("fifo");
 
 sc_clock fifo_clk("clock");

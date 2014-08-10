@@ -34,7 +34,6 @@ macro(verilator_create)
         verilated_save.cpp
         verilated_vcd_c.cpp
         verilated_vcd_sc.cpp
-        verilated_vpi.cpp
     )
 
     set(VERILATOR_SOURCES "")
