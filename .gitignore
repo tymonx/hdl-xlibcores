@@ -1,0 +1,9 @@
+doc/*
+src/hdl/*
+build/*
+*.d
+*.a
+*.o
+*.mk
+*.so
+*.pyc
