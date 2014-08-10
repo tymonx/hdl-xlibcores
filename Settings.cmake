@@ -28,4 +28,8 @@
 
 include_directories(/usr/local/systemc-2.3.1/include)
 include_directories(/usr/local/share/verilator/include)
-link_directories(/usr/local/systemc-2.3.1/lib-linux64)
+link_directories(
+    /usr/local/systemc-2.3.1/lib-linux64
+    /usr/local/lib64
+)
+

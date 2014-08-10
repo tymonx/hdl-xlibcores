@@ -33,9 +33,7 @@
 
 #include <systemc>
 #include <cstdint>
-#include <CppUTest/Utest.h>
-#include <CppUTest/UtestMacros.h>
-#include <CppUTest/CommandLineTestRunner.h>
+#include <gtest/gtest.h>
 
 #define TEST_DATA_COUNT     10
 
@@ -43,55 +41,78 @@ double sc_time_stamp() {
     return 0;
 }
 
-TEST_GROUP(FifoTestGroup) {
+Vipc_fifo fifo("fifo");
 
+sc_clock fifo_clk("clock");
+sc_signal<bool> fifo_reset;
+sc_signal<bool> fifo_write;
+sc_signal<bool> fifo_read;
+sc_signal<bool> fifo_valid;
+sc_signal<bool> fifo_empty;
+sc_signal<bool> fifo_full;
+sc_signal<bool> fifo_overflow;
+sc_signal<std::uint32_t> fifo_data_in;
+sc_signal<std::uint32_t> fifo_data_out;
+sc_signal<std::uint32_t> fifo_data_count;
+
+class FifoTest : public ::testing::Test {
+    protected:
+        FifoTest() {}
+        virtual ~FifoTest() {}
+        virtual void SetUp() {
+            fifo_write = 0;
+            fifo_read = 0;
+            fifo_data_in = 0;
+
+            fifo_reset = 1;
+            sc_start(1, SC_NS);
+            fifo_reset = 0;
+        }
+        virtual void TearDown() {}
 };
 
-TEST(FifoTestGroup, DataCount) {
-    Vipc_fifo fifo("fifo");
+TEST_F(FifoTest, InitAfterReset)  {
+    EXPECT_TRUE(fifo_empty);
+    EXPECT_FALSE(fifo_full);
+    EXPECT_FALSE(fifo_overflow);
+    EXPECT_EQ(0, fifo_data_out);
+}
 
-    sc_clock clk("clock");
-    sc_signal<bool> reset;
-    sc_signal<bool> write;
-    sc_signal<bool> read;
-    sc_signal<bool> valid;
-    sc_signal<bool> empty;
-    sc_signal<bool> full;
-    sc_signal<bool> overflow;
-    sc_signal<std::uint32_t> data_in;
-    sc_signal<std::uint32_t> data_out;
-    sc_signal<std::uint32_t> data_count;
-
-    fifo.clk_i(clk);
-    fifo.reset_i(reset);
-    fifo.valid_o(valid);
-    fifo.write_i(write);
-    fifo.read_i(read);
-    fifo.data_in(data_in);
-    fifo.data_out(data_out);
-    fifo.empty_o(empty);
-    fifo.full_o(full);
-    fifo.overflow_o(overflow);
-    fifo.data_count_out(data_count);
-
-    sc_start(5, SC_NS);
+TEST_F(FifoTest, DataCount) {
+    EXPECT_EQ(0, fifo_data_count);
 
     for (size_t i = 0; i < TEST_DATA_COUNT; i++) {
-        write = 1;
-        data_in = 1;
+        fifo_write = 1;
+        fifo_data_in = 1;
         sc_start(1, SC_NS);
 
-        write = 0;
-        data_in = 0;
+        fifo_write = 0;
+        fifo_data_in = 0;
         sc_start(1, SC_NS);
+
+        EXPECT_EQ(i+1, fifo_data_count);
     }
 
-    CHECK_EQUAL(TEST_DATA_COUNT, data_count);
+    EXPECT_EQ(TEST_DATA_COUNT, fifo_data_count);
 }
 
 int sc_main(int argc, char* argv[]) {
-    MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
-    return CommandLineTestRunner::RunAllTests(argc, argv);
+    /* Binding signals to SystemC module */
+    fifo.clk_i(fifo_clk);
+    fifo.reset_i(fifo_reset);
+    fifo.valid_o(fifo_valid);
+    fifo.write_i(fifo_write);
+    fifo.read_i(fifo_read);
+    fifo.data_in(fifo_data_in);
+    fifo.data_out(fifo_data_out);
+    fifo.empty_o(fifo_empty);
+    fifo.full_o(fifo_full);
+    fifo.overflow_o(fifo_overflow);
+    fifo.data_count_out(fifo_data_count);
+
+    /* Run unit tests */
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
 
 int main(int argc, char* argv[]) {

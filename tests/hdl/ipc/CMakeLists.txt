@@ -33,7 +33,6 @@ target_link_libraries(
     Vipc_fifo
     verilator
     systemc
-    CppUTest
-    CppUTestExt
+    gtest
 )
 add_test(MyTest test_ipc_fifo)

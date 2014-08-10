@@ -7,8 +7,9 @@ External tools and libraries
 ----------------------------
 
 * CMake 2.8
-* Verilator
-* SystemC 2.3.x
+* Verilator 3.862
+* SystemC 2.3.1
+* Google C++ Testing Framework gtest-1.7.0
 * Doxverilog 1.8 (patched Doxygen 1.8.5 for verilog)
 
 Build
