@@ -27,11 +27,14 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-set(VERILOG_MODULE_SOURCES
-    Vipc_fifo.cpp
-    Vipc_fifo__Syms.cpp
-    Vipc_fifo.h
-    Vipc_fifo__Syms.h
-)
+macro(gtest_add)
+    find_path(GTEST_INCLUDE gtest.h
+        PATH_SUFFIXES gtest
+        HINTS /usr/local/include
+    )
+    include_directories(${GTEST_INCLUDE})
 
-verilator_create_module(ipc_fifo "${VERILOG_MODULE_SOURCES}")
+    find_library(GTEST_LIBRARY gtest
+        HINTS /usr/local/lib64
+    )
+endmacro()

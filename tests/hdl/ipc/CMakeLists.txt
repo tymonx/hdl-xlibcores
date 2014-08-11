@@ -31,8 +31,8 @@ add_executable(test_ipc_fifo test_ipc_fifo.cpp)
 target_link_libraries(
     test_ipc_fifo
     Vipc_fifo
-    verilator
-    systemc
-    gtest
+    ${GTEST_LIBRARY}
+    ${VERILATOR_LIBRARY}
+    ${SYSTEMC_LIBRARY}
 )
 add_test(MyTest test_ipc_fifo)

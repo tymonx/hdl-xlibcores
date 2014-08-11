@@ -26,10 +26,12 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-macro(verilator_create)
-    find_path(VERILATOR_INCLUDE_DIR verilated.h
+macro(verilator_add)
+    find_path(VERILATOR_INCLUDE verilated.h
         PATH_SUFFIXES verilator/include
         HINTS /usr/local/share)
+
+    include_directories(${VERILATOR_INCLUDE})
 
     set(VERILATOR_SOURCE_LIST
         verilated.cpp
@@ -40,14 +42,15 @@ macro(verilator_create)
 
     set(VERILATOR_SOURCES "")
     foreach(src ${VERILATOR_SOURCE_LIST})
-        set(VERILATOR_SOURCES ${VERILATOR_SOURCES}
-            ${VERILATOR_INCLUDE_DIR}/${src})
+        set(VERILATOR_SOURCES ${VERILATOR_SOURCES} ${VERILATOR_INCLUDE}/${src})
     endforeach()
 
     add_library(verilator SHARED ${VERILATOR_SOURCES})
+
+    set(VERILATOR_LIBRARY verilator)
 endmacro()
 
-macro(verilator_add verilog_module verilog_sources)
+macro(verilator_create_module verilog_module verilog_sources)
     # Redirect verilog C++ files to source subdirectory
     string(
         REGEX REPLACE "${CMAKE_SOURCE_DIR}/" ""
