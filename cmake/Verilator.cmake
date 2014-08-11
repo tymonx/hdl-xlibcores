@@ -27,7 +27,9 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 macro(verilator_create)
-    set(VERILATOR_INCLUDE /usr/local/share/verilator/include)
+    find_path(VERILATOR_INCLUDE_DIR verilated.h
+        PATH_SUFFIXES verilator/include
+        HINTS /usr/local/share)
 
     set(VERILATOR_SOURCE_LIST
         verilated.cpp
@@ -38,7 +40,8 @@ macro(verilator_create)
 
     set(VERILATOR_SOURCES "")
     foreach(src ${VERILATOR_SOURCE_LIST})
-        set(VERILATOR_SOURCES ${VERILATOR_SOURCES} ${VERILATOR_INCLUDE}/${src})
+        set(VERILATOR_SOURCES ${VERILATOR_SOURCES}
+            ${VERILATOR_INCLUDE_DIR}/${src})
     endforeach()
 
     add_library(verilator SHARED ${VERILATOR_SOURCES})
