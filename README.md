@@ -6,7 +6,7 @@ HDL x-library of IP Cores
 External tools and libraries
 ----------------------------
 
-* CMake 2.8
+* CMake 2.8.10
 * Verilator 3.862
 * SystemC 2.3.1
 * Google C++ Testing Framework gtest-1.7.0
