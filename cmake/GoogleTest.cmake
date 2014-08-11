@@ -30,11 +30,8 @@
 macro(gtest_add)
     find_path(GTEST_INCLUDE gtest.h
         PATH_SUFFIXES gtest
-        HINTS /usr/local/include
     )
     include_directories(${GTEST_INCLUDE})
 
-    find_library(GTEST_LIBRARY gtest
-        HINTS /usr/local/lib64
-    )
+    find_library(GTEST_LIBRARY gtest)
 endmacro()

@@ -30,7 +30,8 @@
 macro(verilator_add)
     find_path(VERILATOR_INCLUDE verilated.h
         PATH_SUFFIXES verilator/include
-        HINTS /usr/local/share)
+        HINTS /usr/local/share
+    )
 
     include_directories(${VERILATOR_INCLUDE})
 
