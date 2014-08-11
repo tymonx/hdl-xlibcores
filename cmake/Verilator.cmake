@@ -33,7 +33,7 @@ macro(verilator_add)
         HINTS /usr/local/share
     )
 
-    include_directories(${VERILATOR_INCLUDE})
+include_directories(SYSTEM ${VERILATOR_INCLUDE})
 
     set(VERILATOR_SOURCE_LIST
         verilated.cpp
@@ -50,6 +50,10 @@ macro(verilator_add)
     add_library(verilator SHARED ${VERILATOR_SOURCES})
 
     set(VERILATOR_LIBRARY verilator)
+    set_target_properties(
+        verilator
+        PROPERTIES COMPILE_FLAGS "-std=c++11 -Wall -Werror"
+    )
 endmacro()
 
 macro(verilator_create_module verilog_module verilog_sources)

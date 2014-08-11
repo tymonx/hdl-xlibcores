@@ -30,8 +30,6 @@
 cmake_minimum_required(VERSION 2.8)
 project(hdl-xlibcores)
 
-set(CMAKE_CXX_FLAGS "-std=c++11")
-
 include(cmake/SystemC.cmake)
 include(cmake/Verilator.cmake)
 include(cmake/GoogleTest.cmake)

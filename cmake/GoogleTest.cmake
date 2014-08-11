@@ -31,7 +31,7 @@ macro(gtest_add)
     find_path(GTEST_INCLUDE gtest.h
         PATH_SUFFIXES gtest
     )
-    include_directories(${GTEST_INCLUDE})
+    include_directories(SYSTEM ${GTEST_INCLUDE})
 
     find_library(GTEST_LIBRARY gtest)
 endmacro()

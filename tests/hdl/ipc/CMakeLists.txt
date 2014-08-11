@@ -35,4 +35,8 @@ target_link_libraries(
     ${VERILATOR_LIBRARY}
     ${SYSTEMC_LIBRARY}
 )
+set_target_properties(
+    test_ipc_fifo
+    PROPERTIES COMPILE_FLAGS "-std=c++11 -Wall -Wextra -Wpedantic -Werror"
+)
 add_test(MyTest test_ipc_fifo)

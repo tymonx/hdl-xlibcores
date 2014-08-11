@@ -30,7 +30,7 @@
 macro(systemc_add)
     find_path(SYSTEMC_INCLUDE systemc
         PATH_SUFFIXES systemc-2.3.1/include)
-    include_directories(${SYSTEMC_INCLUDE})
+    include_directories(SYSTEM ${SYSTEMC_INCLUDE})
 
     find_library(SYSTEMC_LIBRARY systemc
         PATH_SUFFIXES systemc-2.3.1/lib-linux64)
