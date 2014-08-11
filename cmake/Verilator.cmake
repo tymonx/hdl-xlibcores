@@ -51,6 +51,8 @@ macro(verilator_add verilog_module verilog_sources)
         VERILOG_OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}
     )
 
+    set(VERILOG_OUTPUT_DIR "${CMAKE_SOURCE_DIR}/src/${VERILOG_OUTPUT}")
+
     set(VERILATOR_INCS "")
     set(VERILATOR_ARGS "")
 
@@ -69,21 +71,21 @@ macro(verilator_add verilog_module verilog_sources)
     set(VERILOG_OUTPUT_SOURCES "")
     foreach(source ${verilog_sources})
         set(VERILOG_OUTPUT_SOURCES ${VERILOG_OUTPUT_SOURCES}
-            ${CMAKE_SOURCE_DIR}/src/${VERILOG_OUTPUT}/${source})
+            ${VERILOG_OUTPUT_DIR}/${source})
     endforeach()
 
     add_custom_command(
         OUTPUT ${VERILOG_OUTPUT_SOURCES}
-        COMMAND ${CMAKE_COMMAND} -E make_directory src/${VERILOG_OUTPUT}
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${VERILOG_OUTPUT_DIR}
         COMMAND verilator ${VERILATOR_ARGS} ${VERILATOR_INCS}
             -Wall
-            -Mdir src/${VERILOG_OUTPUT}
-            --sc ${VERILOG_OUTPUT}/${verilog_module}.v
-        COMMAND ${CMAKE_COMMAND} -E remove src/${VERILOG_OUTPUT}/*.mk
-        COMMAND ${CMAKE_COMMAND} -E remove src/${VERILOG_OUTPUT}/*.d
-        COMMAND ${CMAKE_COMMAND} -E remove src/${VERILOG_OUTPUT}/*.dat
-        MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/${verilog_module}.v
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+            -Mdir ${VERILOG_OUTPUT_DIR}
+            --sc ${verilog_module}.v
+        COMMAND ${CMAKE_COMMAND} -E remove ${VERILOG_OUTPUT_DIR}/*.mk
+        COMMAND ${CMAKE_COMMAND} -E remove ${VERILOG_OUTPUT_DIR}/*.d
+        COMMAND ${CMAKE_COMMAND} -E remove ${VERILOG_OUTPUT_DIR}/*.dat
+        MAIN_DEPENDENCY ${verilog_module}.v
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         COMMENT "Generating SystemC module ${verilog_module}"
     )
 
